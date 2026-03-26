@@ -6,6 +6,7 @@ Thanks **ali1234** for creating: [vhs-teletext](https://github.com/ali1234/vhs-t
 # Transition from vhs-teletext and update VHSTTX
 ```
 source myvenv/bin/activate
+git clone https://github.com/KOTYA8/VHSTTX.git
 python3 setup.py install
 ```
 ### Uninstalling the old version
@@ -29,12 +30,9 @@ pipx install -e .[qt] --force
 ```
 pip install PyQt5
 ```
-2. In the terminal go to the folder:   
-`cd VHSTTX/misc/ubuntu`
-3. Give permission and install   
+2. Install   
 ```
-chmod +x install-ttviewer.sh
-./install-ttviewer.sh
+ttviewer-install
 ```
 
 # Functions
