@@ -1,5 +1,5 @@
-# VHSTT2_VER
-This repository is presented, all versions of [VHSTT2](https://github.com/KOTYA8/VHSTT2)
+# VHSTTX_VER
+This repository is presented, all versions of [VHSTTX](https://github.com/KOTYA8/VHSTTX)
 
 # Installation
 ```
