@@ -3,6 +3,14 @@ VHS Teletext X - advanced features of [vhs-teletext](https://github.com/ali1234/
    
 Thanks **ali1234** for creating: [vhs-teletext](https://github.com/ali1234/vhs-teletext)
 
+# Transition from vhs-teletext and update VHSTTX
+```
+source myvenv/bin/activate
+python3 setup.py install
+```
+### Uninstalling the old version
+In a folder `myvenv/lib/python3.12/site-packages`, we delete `teletext` and `teletext-1-py3.12.egg-info` folders. 
+
 # Future Apps
 * **Teletext Viewer** - ✅ realized
 
@@ -12,7 +20,7 @@ Thanks **ali1234** for creating: [vhs-teletext](https://github.com/ali1234/vhs-t
 * **Line numbering (vbiview)** - ✅ realized
 
 # Apps
-* **Teletext Viewer** - Application for viewing teletext. Supports arrow switching. Shows subpages. Can be opened via .t42 file.
+* **Teletext Viewer** - Application for viewing teletext. Supports arrow switching. Shows subpages. Can be opened via .t42 file. Customize pages (remove blinking, double height and width). Language selection.   
 ### Installation Viewer
 1. Install QT and PyQt5   
 ```
@@ -141,4 +149,4 @@ while true ; do ffmpeg -y -f video4linux2 -i /dev/video0 -t 0:02 -f null - ; sle
 All previous versions are available in the repository: [VHSTTX_VER](https://github.com/KOTYA8/VHSTTX_VER)  
 
 ### **Currently**  
-* **V1** - Support **--ignore-line** and **--used-line** for `record` and `deconvolve`. Numbering in `vbiview`. Templates: **fs200sp**, **fs200lp**, **hd630lp**, **hd630sp**, **grundig_2x4**, **hrs9700**, **hd630vdlp**, **hd630vdlp24**, **fs200vdsp**, **fs200vdlp**, **betacamsp**, **betamax**. New `Teletext viewer`.
+* **V1** - Support **--ignore-line** and **--used-line** for `record` and `deconvolve`. Numbering in `vbiview`. Templates: **fs200sp**, **fs200lp**, **hd630lp**, **hd630sp**, **grundig_2x4**, **hrs9700**, **hd630vdlp**, **hd630vdlp24**, **fs200vdsp**, **fs200vdlp**, **betacamsp**, **betamax**. New **Teletext viewer**. Language support for further functions: **Italian**, **German**, **French**, **Polish**, **Dutch**.
