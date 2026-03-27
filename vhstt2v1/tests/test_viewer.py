@@ -1,5 +1,6 @@
 import sys
 import os
+import pathlib
 import tempfile
 import types
 import unittest
@@ -12,6 +13,13 @@ sys.modules.setdefault('tqdm', tqdm_module)
 from teletext.service import Service
 from teletext.subpage import Subpage
 from teletext.viewer import DirectPageBuffer, ServiceNavigator, describe_service_metadata
+from teletext.viewer import (
+    build_split_pattern,
+    export_html,
+    export_selected_html,
+    export_selected_t42,
+    export_split_t42,
+)
 
 
 class TestDirectPageBuffer(unittest.TestCase):
@@ -277,3 +285,55 @@ class TestServiceMetadata(unittest.TestCase):
         self.assertEqual(metadata.likely_broadcaster, 'DEMO')
         self.assertIsNone(metadata.likely_language)
         self.assertEqual(metadata.confidence, 'low')
+
+
+class TestServiceExportHelpers(unittest.TestCase):
+    def setUp(self):
+        self.service = Service()
+        self.service.insert_page(make_subpage(1, 0x00, 0x0000, header_text='100 TELEINF 08:11:19'))
+        self.service.insert_page(make_subpage(1, 0x00, 0x0001, header_text='100 TELEINF 08:11:20'))
+        self.service.insert_page(make_subpage(1, 0x01, 0x0000, header_text='101 NOVOSTI 08:11:21'))
+        self.tempdir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tempdir.cleanup)
+
+    def test_build_split_pattern_matches_flag_selection(self):
+        self.assertEqual(build_split_pattern(True, True, True, True), '{m}{p}-{s}-{c}.t42')
+        self.assertEqual(build_split_pattern(True, True, False, False), '{m}{p}.t42')
+        self.assertEqual(build_split_pattern(False, True, True, False), '{p}-{s}.t42')
+        self.assertEqual(build_split_pattern(False, False, False, False), 'capture.t42')
+
+    def test_export_split_t42_can_group_subpages_by_page(self):
+        paths = export_split_t42(
+            self.service,
+            self.tempdir.name,
+            include_magazine=True,
+            include_page=True,
+            include_subpage=False,
+            include_count=False,
+        )
+
+        self.assertEqual(
+            sorted(path.name for path in paths),
+            ['100.t42', '101.t42'],
+        )
+        self.assertTrue((pathlib.Path(self.tempdir.name) / '100.t42').stat().st_size > 0)
+
+    def test_export_selected_helpers_write_single_files(self):
+        t42_path = pathlib.Path(self.tempdir.name) / 'one-subpage.t42'
+        html_path = pathlib.Path(self.tempdir.name) / 'one-subpage.html'
+
+        export_selected_t42(self.service, t42_path, 0x100, subpage_number=0x0001)
+        export_selected_html(self.service, html_path, 0x100, subpage_number=0x0001, localcodepage='cyr')
+
+        self.assertTrue(t42_path.exists())
+        self.assertTrue(html_path.exists())
+        self.assertIn('Page 100-0001', html_path.read_text(encoding='utf-8'))
+
+    def test_export_html_can_split_subpages(self):
+        paths = export_html(self.service, self.tempdir.name, include_subpages=True)
+
+        self.assertEqual(
+            sorted(path.name for path in paths),
+            ['100-0000.html', '100-0001.html', '101-0000.html'],
+        )
+        self.assertTrue((pathlib.Path(self.tempdir.name) / 'teletext.css').exists())
