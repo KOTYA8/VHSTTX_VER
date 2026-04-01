@@ -12,7 +12,10 @@ python3 setup.py install
 ```
 ### Update
 ```
+cd VHSTTX
+git pull
 python3 setup.py install
+pipx install -e .[qt] --force
 ```
 ### Uninstalling the old version
 In a folder `myvenv/lib/python3.12/site-packages`, we delete `teletext` and `teletext-1-py3.12.egg-info` folders. 
@@ -41,11 +44,17 @@ In a folder `myvenv/lib/python3.12/site-packages`, we delete `teletext` and `tel
 * Frame-by-frame viewing - ✅ realized
 * Frame marks - ✅ realized
 * Saving with VBI Tune Live - ✅ realized
+* Cutting frames from VBI - ✅ realized
+* Adding VBI Files - ✅ realized
 
 # Future Functions
-* **Ignore Line (record/deconvolve)** - ✅ realized
-* **Used Line (record/deconvolve)** - ✅ realized
+* **Ignore Line (record/deconvolve/vbiview)** - ✅ realized
+* **Used Line (record/deconvolve/vbiview)** - ✅ realized
 * **Line numbering (vbiview)** - ✅ realized
+* **Brightness/Sharpness/Gain/Contrast (record/deconvolve/vbiview)** - ✅ realized
+* **Fix Capture Card (record/deconvolve/vbiview)** - ✅ realized
+* **URXVT Terminal (deconvolve)** - ✅ realized
+* **Pause for (record/deconvolve)** - ✅ realized
 * **Spellcheck** - ⚠️ bugs
 
 # Apps
@@ -68,18 +77,24 @@ teletext vbicrop test.vbi
 # Functions
 * **Ignore Line** for **record**/**deconvolve**/**vbiview** (`-il/--ignore-line`) - Ignoring lines when writing to VBI and deconvolving to t42.   
 ```
-teletext record --ignore-line 1,2,20 test.vbi
+teletext record -il 1,2,20 test.vbi
 ```
 ```
-teletext deconvolve --ignore-line 1,2,20 test.vbi > test.t42
+teletext deconvolve -il 1,2,20 test.vbi > test.t42
+```
+```
+teletext vbiview -il 4,5 test.vbi > test.t42
 ```
 
 * **Used Line** for **record**/**deconvolve**/**vbiview** (`-ul/--used-line`) - Using only selected lines when writing to VBI and deconvolving to t42.   
 ```
-teletext record --used-line 4,5 test.vbi
+teletext record -ul 4,5 test.vbi
 ```
 ```
-teletext deconvolve --used-line 4,5 test.vbi > test.t42
+teletext deconvolve -ul 4,5 test.vbi > test.t42
+```
+```
+teletext vbiview -ul 4,5 test.vbi > test.t42
 ```
    
 * **Line numbering** for **vbiview** - Line numbering in VBI Viewer.   
@@ -92,7 +107,7 @@ teletext vbiview -f hd630sp test.vbi
 ```
 teletext deconvolve -f hd630lp test.vbi > test.t42  
 ```
-* **Brightness/Sharpness/Gain/Contrast** for **record**/**deconvolve**/**vbiview** (`-bn/--brightness`/`-sp/--sharpness`/`-gn/--gain`/`-ct/--contrast`) - Adjusting Values ​​for VBI from **0** to **100**.   
+* **Brightness/Sharpness/Gain/Contrast** for **record**/**deconvolve**/**vbiview** (`-bn/--brightness`/`-sp/--sharpness`/`-gn/--gain`/`-ct/--contrast`) - Adjusting Values ​​for VBI from **0** to **100** (**50** - no change).   
 ```
 teletext record -bn 25 -sp 30 -gn 50 -ct 0 test.vbi
 ```
@@ -122,11 +137,12 @@ teletext deconvolve -fcc 2 3 test.vbi > test.t42
 ```
 teletext vbiview -fcc 2 3 test.vbi
 ```
-* **URXVT Terminal** for **deconvolve** (`-u/--urxvt`) - Urxvt terminal for viewing teletext in real time.
+* **URXVT Terminal** for **deconvolve** (`-u/--urxvt`) - Urxvt terminal for **viewing individual teletext pages and filters in real time**.
 ```
 teletext deconvolve test.vbi -u -p 100
 teletext deconvolve test.vbi -u -r 0
 ```
+* **Pause** for **record**/**deconvolve** (`P button`) - **Pauses** while recording or deconvolving.
 
 # Guide for Functions
 [GUIDE](https://github.com/KOTYA8/VHSTTX/blob/main/examples/help-all.txt)
@@ -199,7 +215,7 @@ sudo modprobe -v bttv card=16 tuner=0 radio=0
 sudo touch /etc/modprobe.d/bttv.conf
 ```
 3. In a folder `/etc/modprobe.d/bttv.conf`, we write `options bttv card=16 tuner=0 radio=0`
-### Install Terminal for Teletext
+### Install Terminal for Teletext (*new Teletext Viewer made*)
 ```
 sudo apt-get install tv-fonts rxvt-unicode
 cd /etc/fonts/conf.d
@@ -214,7 +230,7 @@ teletext service test.t42 | teletext interactive
 ```
 
 # Additional features
-### Fixing self-brightness on Capture Card
+### Fixing self-brightness on Capture Card (*made in the version 2*)
 1. Installing ffmpeg
 ```
 sudo apt install ffmpeg
@@ -229,4 +245,4 @@ while true ; do ffmpeg -y -f video4linux2 -i /dev/video0 -t 0:02 -f null - ; sle
 All previous versions are available in the repository: [VHSTTX_VER](https://github.com/KOTYA8/VHSTTX_VER)  
 
 ### **Currently**  
-* **V2** - Support for adjusting **brightness**, **sharpness**, **gain** and **contrast** and coefficients. Simplification of opening **urxvt terminal** for `deconvolve`. Fixed auto-brightness on vbi0 (`-fcc`). Added: **VBI Tune**, **VBI Tune Live**, **VBI Crop** application. Fixed (**Teletext Viewer**): opening **folders from HTML/T42 files**, added **page scrolling speed**, added **All Symbols** and **No Subpages** flag, **HTML viewer**, **HTML fonts to Split**.
+* **V2** - Support for adjusting **brightness**, **sharpness**, **gain** and **contrast** and coefficients. Simplification of opening **urxvt terminal** for `deconvolve`. Fixed auto-brightness on vbi0 (`-fcc`). Added: **VBI Tune**, **VBI Tune Live**, **VBI Crop** application. Fixed (**Teletext Viewer**): opening **folders from HTML/T42 files**, added **page scrolling speed**, added **All Symbols** and **No Subpages** flag, **HTML viewer**, **HTML fonts to Split**. **Pause** for `record/deconvolve`.
