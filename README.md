@@ -38,7 +38,7 @@ In a folder `myvenv/lib/python3.12/site-packages`, we delete `teletext` and `tel
 * Decoder Tuning (Template/Extra Roll/Line Start Range) - ✅ realized
 * Line Selection - ✅ realized
 * Fix Capture Card - ✅ realized
-* Arguments - ✅ realized
+* Arguments and Presets - ✅ realized
 
 ## **VBI Crop** - ✅ realized
 * Frame-by-frame viewing - ✅ realized
@@ -245,4 +245,4 @@ while true ; do ffmpeg -y -f video4linux2 -i /dev/video0 -t 0:02 -f null - ; sle
 All previous versions are available in the repository: [VHSTTX_VER](https://github.com/KOTYA8/VHSTTX_VER)  
 
 ### **Currently**  
-* **V2** - Support for adjusting **brightness**, **sharpness**, **gain** and **contrast** and coefficients. Simplification of opening **urxvt terminal** for `deconvolve`. Fixed auto-brightness on vbi0 (`-fcc`). Added: **VBI Tune**, **VBI Tune Live**, **VBI Crop** application. Fixed (**Teletext Viewer**): opening **folders from HTML/T42 files**, added **page scrolling speed**, added **All Symbols** and **No Subpages** flag, **HTML viewer**, **HTML fonts to Split**. **Pause** for `record/deconvolve`.
+* **V2** - Support for adjusting **brightness**, **sharpness**, **gain** and **contrast** and coefficients. Made a simplification for **Ignore Line** (`-il`) and **Used Line** (`-ul`). Simplification of opening **urxvt terminal** for `deconvolve`. Fixed auto-brightness on vbi0 (`-fcc`). **Pause** for `record/deconvolve`. Added: **VBI Tune**, **VBI Tune Live**, **VBI Crop** application. Fixed (**Teletext Viewer**): opening **folders from HTML/T42 files**, added **page scrolling speed**, added **All Symbols** and **No Subpages** flag, **HTML viewer**, **HTML fonts to Split**.
